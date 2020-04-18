@@ -106,7 +106,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
 		ySpeed = -ySpeed;
 	    }
 
-	    // if we've almost stopped moving, let's say we're done
+	    // if we've gone off the bottom, we're done
 	    if (upperLeftY > container.getHeight()) done = true;
 
 	    container.repaint();
