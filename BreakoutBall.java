@@ -1,5 +1,6 @@
 import edu.siena.csis225.threadgraphics.*;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
@@ -67,6 +68,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
     @Override
     public void paint(Graphics g) {
 
+	g.setColor(Color.BLACK);
 	g.fillOval((int)upperLeftX, (int)upperLeftY, SIZE, SIZE);
     }
 

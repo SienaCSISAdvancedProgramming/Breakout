@@ -20,8 +20,11 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
     // delay time between frames of animation (ms)
     public static final int DELAY_TIME = 33;
 
-
+    // the paddle
     private BreakoutPaddle paddle;
+
+    // the bricks
+    private BrickCollection bricks;
     
     /**
        Constructor, which simply calls the superclass constructor
@@ -41,6 +44,7 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
     protected void paint(Graphics g) {
 
 	paddle.paint(g);
+	bricks.paint(g);
     }
 
     /**
@@ -68,6 +72,7 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
     protected void buildGUI(JFrame frame, JPanel panel) {
 
 	paddle = new BreakoutPaddle(panel);
+	bricks = new BrickCollection(panel);
     	frame.add(panel);
 
 	// repaint regularly forever thread
