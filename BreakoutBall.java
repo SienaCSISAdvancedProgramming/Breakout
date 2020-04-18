@@ -111,6 +111,13 @@ class BreakoutBall extends AnimatedGraphicsObject {
 		ySpeed = -ySpeed;
 	    }
 
+	    // bounce off the paddle
+	    if (paddle.overlapsBall((int)upperLeftX + SIZE/2,
+				    (int)upperLeftY + SIZE/2, SIZE/2)) {
+		bounced = true;
+		ySpeed = -Math.abs(ySpeed);
+	    }
+						  
 	    // if we've gone off the bottom, we're done
 	    if (upperLeftY > container.getHeight()) done = true;
 

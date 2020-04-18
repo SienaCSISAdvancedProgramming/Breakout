@@ -63,5 +63,21 @@ class BreakoutPaddle extends MouseAdapter {
 	component.repaint();
     }
 
+    /**
+       Check if the paddle overlaps the ball, as defined by its center
+       and radius.
+
+       @param ballX x-coordinate of the center of the ball
+       @param ballY y-coordinate of the center of the ball
+       @param ballR radius of the ball
+       @return true if the paddle overlaps the bal 
+    */
+    public boolean overlapsBall(int ballX, int ballY, int ballR) {
+
+	return Collision.circleOverlapsRectangle(ballX, ballY, ballR,
+						 paddleX,
+						 component.getHeight() - 2*PADDLE_HEIGHT,
+						 PADDLE_WIDTH, PADDLE_HEIGHT);
+    }
 }
 
