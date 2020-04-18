@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import javax.swing.JComponent;
 
 /**
@@ -77,29 +78,41 @@ public class BrickCollection {
     }
     
     /**
-     * Check if the given ball overlaps any brick, if so, remove it
-     * and return true, otherwise return false.
-     * 
-     * @param ball the BreakoutBall that is to be checked for overlap
-     * with the existing bricks
-     * 
-     * @return whether the ball overlapped any brick
-     */
-    public boolean hitBrick(BreakoutBall ball) {
+       Check if the given ball overlaps any brick, if so, remove it
+       and return true, otherwise return false.
+       
+       @param ballX the x-coordinate of the BreakoutBall that is to be
+       checked for overlap with the existing bricks
+       @param ballY the y-coordinate of the BreakoutBall that is to be
+       checked for overlap with the existing bricks
+       @param ballR the radius of the BreakoutBall that is to be
+       checked for overlap with the existing bricks
 
-	return false;
-	/*        boolean hitOne = false;
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < bricksPerRow; col++) {
-                if (bricks[row][col] != null && bricks[row][col].overlaps(ball)) {
-                    bricks[row][col].removeFromCanvas();
-                    bricks[row][col] = null;
-                    hitOne = true;
+       
+       @return the upper left coordinates of a brick that was hit, or null
+       if no brick was hit
+     */
+    public Point hitBrick(int ballX, int ballY, int ballR) {
+
+	Point lastHit = null;
+	int rowTop = TOP_ROW_OFFSET;
+	int brickWidth = component.getWidth() / BRICKS_PER_ROW;
+        for (int row = 0; row < NUM_ROWS; row++) {
+	    int nextBrickX = 0;
+            for (int col = 0; col < BRICKS_PER_ROW; col++) {
+                if (bricks[row][col] &&
+		    Collision.circleOverlapsRectangle(ballX, ballY, ballR,
+						      nextBrickX, rowTop,
+						      brickWidth,
+						      BRICK_HEIGHT)) {
+                    bricks[row][col] = false;
+                    lastHit = new Point(nextBrickX, rowTop);
                 }
+		nextBrickX += brickWidth;
             }
+	    rowTop += BRICK_HEIGHT;
         }
         
-        return hitOne;
-	*/
+        return lastHit;
     }
 }

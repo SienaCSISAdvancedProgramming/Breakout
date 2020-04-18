@@ -38,6 +38,9 @@ class BreakoutBall extends AnimatedGraphicsObject {
     // reference to the paddle
     private BreakoutPaddle paddle;
 
+    // reference to the bricks
+    private BrickCollection bricks;
+
     /**
        Construct a new BreakoutBall object, choosing a random location and
        speed.
@@ -46,7 +49,8 @@ class BreakoutBall extends AnimatedGraphicsObject {
        @param container the Swing component in which this ball is being
        drawn to allow check sizes
     */
-    public BreakoutBall(JComponent container, BreakoutPaddle paddle) {
+    public BreakoutBall(JComponent container, BrickCollection bricks,
+			BreakoutPaddle paddle) {
 
 	super(container);
 
@@ -58,6 +62,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
 	xSpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
 	ySpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
 	this.paddle = paddle;
+	this.bricks = bricks;
     }
 
     /**
@@ -110,6 +115,21 @@ class BreakoutBall extends AnimatedGraphicsObject {
 		ySpeed = -ySpeed;
 	    }
 
+	    // bounce off bricks, for now just reverse y speed
+	    Point brickHit = bricks.hitBrick((int)upperLeftX,
+					     (int)upperLeftY, SIZE/2);
+	    if (brickHit != null) {
+		// if moving up, position at the bottom of the brick we just hit
+		if (ySpeed < 0) {
+		    upperLeftY = brickHit.y + BrickCollection.BRICK_HEIGHT;
+		}
+		// if moving down, position at the top
+		else {
+		    upperLeftY = brickHit.y;
+		}
+		ySpeed = -ySpeed;
+	    }
+	    
 	    // bounce off the paddle
 	    if (paddle.overlapsBall((int)upperLeftX + SIZE/2,
 				    (int)upperLeftY + SIZE/2, SIZE/2)) {
