@@ -24,7 +24,7 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
 
     // current x-coordinate of the left side of the paddle
     private int paddleX;
-    
+
     /**
        Constructor, which simply calls the superclass constructor
        with an appropriate window label and dimensions.
@@ -41,7 +41,6 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
     */
     @Override
     protected void paint(Graphics g) {
-
 
 	// paddle at its current position
 	g.setColor(Color.black);
@@ -71,6 +70,11 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
     @Override
     public void mousePressed(MouseEvent e) {
 
+	BreakoutBall newBall = new BreakoutBall(panel);
+	synchronized(lock) {
+	    list.add(newBall);
+	}
+	newBall.start();
 	panel.repaint();
     }
     /**

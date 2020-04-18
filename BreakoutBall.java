@@ -2,21 +2,28 @@ import edu.siena.csis225.threadgraphics.*;
 
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Random;
 import javax.swing.JComponent;
 
 /**
-   The BouncingGravityBall class is responsible for managing the life
-   of one ball that starts out with a given x and y speed, moves
-   subject to acceleration due to gravity, until it falls off the
-   bottom of the window.
+   The BreakoutBall class is responsible for managing the life
+   of a ball that can bounce off a paddle and hit bricks, as well
+   as bouncing off the walls and ceiling.
 
    @author Jim Teresco
    @version Spring 2020
 */
 class BreakoutBall extends AnimatedGraphicsObject {
 
+    // a static Random object shared among all BreakoutBall objects
+    private static Random r = new Random();
+
+    // range of possible start speeds in x and y
+    public static final double MIN_SPEED = 3;
+    public static final double MAX_SPEED = 10;
+    
     // ball size
-    public static final int SIZE = 50;
+    public static final int SIZE = 25;
 
     // delay time between frames of animation (ms)
     public static final int DELAY_TIME = 33;
@@ -27,30 +34,28 @@ class BreakoutBall extends AnimatedGraphicsObject {
     // latest location of the ball
     private double upperLeftX, upperLeftY;
 
-    // max allowed coordinates of the upper left corner
-    private int xMax, yMax;
+    // max allowed x coordinate of the upper left corner
+    private int xMax;
 
     /**
-       Construct a new BreakoutBall object.
+       Construct a new BreakoutBall object, choosing a random location and
+       speed.
 
-       @param startCenter the initial point at which the center of the
-       ball should be drawn
-       @param xSpeed initial x speed, pixels per second
-       @param ySpeed initial y speed, pixels per second
        @param container the Swing component in which this ball is being
        drawn to allow it to call that component's repaint method
     */
-    public BreakoutBall(Point startCenter,
-			double xSpeed, double ySpeed,
-			JComponent container) {
+    public BreakoutBall(JComponent container) {
 
 	super(container);
-	this.xSpeed = xSpeed;
-	this.ySpeed = ySpeed;
-	upperLeftX = startCenter.x - SIZE/2;
-	upperLeftY = startCenter.y - SIZE/2;
-	this.yMax = container.getHeight() - SIZE;
-	this.xMax = container.getWidth() - SIZE;
+
+	// we place the ball initially so its half way up, near the
+	// center
+	int width = container.getWidth();
+	upperLeftX = width/4 - SIZE/2 + r.nextInt(width/2);
+	upperLeftY = container.getHeight() / 2;
+	xSpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
+	ySpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
+	xMax = container.getWidth() - SIZE;
     }
 
     /**
@@ -71,6 +76,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
     @Override
     public void run() {
 
+	done = false;
 	while (!done) {
 
 	    sleepWithCatch(DELAY_TIME);
@@ -100,29 +106,10 @@ class BreakoutBall extends AnimatedGraphicsObject {
 		ySpeed = -ySpeed;
 	    }
 
-	    if (upperLeftY > yMax) {
-		upperLeftY = yMax;
-		bounced = true;
-		ySpeed = -ySpeed;
-	    }
-
-	    // if we bounced, we're going to dampen speed in both dimensions
-	    if (bounced) {
-		xSpeed *= DAMPING;
-		ySpeed *= DAMPING;
-	    }
-
 	    // if we've almost stopped moving, let's say we're done
-	    done = (upperLeftY == yMax &&
-		    Math.abs(ySpeed) < ALMOST_STOPPED &&
-		    Math.abs(xSpeed) < ALMOST_STOPPED);
+	    if (upperLeftY > container.getHeight()) done = true;
 
-	    // gravity factor also
-	    ySpeed += GRAVITY;
-	    
 	    container.repaint();
 	}
-
-	done = true;
     }
 }
