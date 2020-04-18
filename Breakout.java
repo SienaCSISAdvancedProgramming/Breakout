@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -16,15 +15,10 @@ import javax.swing.JPanel;
    @version Spring 2020
 */
 
-public class Breakout extends ThreadGraphicsController implements MouseListener, MouseMotionListener {
+public class Breakout extends ThreadGraphicsController implements MouseListener {
 
-    // dimensions of the paddle
-    public static final int PADDLE_WIDTH = 50;
-    public static final int PADDLE_HEIGHT = 20;
-
-    // current x-coordinate of the left side of the paddle
-    private int paddleX;
-
+    private BreakoutPaddle paddle;
+    
     /**
        Constructor, which simply calls the superclass constructor
        with an appropriate window label and dimensions.
@@ -42,15 +36,13 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
     @Override
     protected void paint(Graphics g) {
 
-	// paddle at its current position
-	g.setColor(Color.black);
-	g.fillRect(paddleX, panel.getHeight() - 2*PADDLE_HEIGHT,
-		   PADDLE_WIDTH, PADDLE_HEIGHT);
+	paddle.paint(g);
     }
 
     /**
        Add the mouse listeners to the panel.  Here, we need methods
-       from both MouseListener and MouseMotionListener.
+       from both MouseListener, as the MouseMotionListener will be
+       the BreakoutPaddle.
 
        @param p the JPanel to which the mouse listeners will be
        attached
@@ -59,7 +51,19 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
     protected void addListeners(JPanel panel) {
 
 	panel.addMouseListener(this);
-	panel.addMouseMotionListener(this);
+    }
+    /**
+       Add the panel to the frame, and set up additional components, which
+       here are the BreakoutBall and the BreakoutBricks.
+
+       @param frame the JFrame to which the panel is added
+       be added
+       @param panel the JPanel where graphics will be drawn
+    */
+    protected void buildGUI(JFrame frame, JPanel panel) {
+
+	paddle = new BreakoutPaddle(panel);
+    	frame.add(panel);
     }
 
     /**
@@ -77,27 +81,11 @@ public class Breakout extends ThreadGraphicsController implements MouseListener,
 	newBall.start();
 	panel.repaint();
     }
-    /**
-       Mouse move event handler to control the paddle
-
-       @param e mouse event info
-    */
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
-	paddleX = e.getPoint().x;
-	if (paddleX > panel.getWidth() - PADDLE_WIDTH) {
-	    paddleX = panel.getWidth() - PADDLE_WIDTH;
-	}
-
-	panel.repaint();
-    }
 
     // fill in unused methods needed to satify the interfaces, which
     // are needed since we can't use the MouseAdapter, as this class
     // now needs to extend the abstract class
     public void mouseReleased(MouseEvent e) {}
-    public void mouseDragged(MouseEvent e) {}
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
     public void mouseClicked(MouseEvent e) {}
