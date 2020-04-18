@@ -37,14 +37,18 @@ class BreakoutBall extends AnimatedGraphicsObject {
     // max allowed x coordinate of the upper left corner
     private int xMax;
 
+    // reference to the paddle
+    private BreakoutPaddle paddle;
+
     /**
        Construct a new BreakoutBall object, choosing a random location and
        speed.
 
+       @param paddle the BreakoutPaddle we need to see if we hit
        @param container the Swing component in which this ball is being
        drawn to allow it to call that component's repaint method
     */
-    public BreakoutBall(JComponent container) {
+    public BreakoutBall(JComponent container, BreakoutPaddle paddle) {
 
 	super(container);
 
@@ -56,6 +60,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
 	xSpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
 	ySpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
 	xMax = container.getWidth() - SIZE;
+	this.paddle = paddle;
     }
 
     /**

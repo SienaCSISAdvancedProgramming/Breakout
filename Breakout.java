@@ -74,7 +74,7 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
     @Override
     public void mousePressed(MouseEvent e) {
 
-	BreakoutBall newBall = new BreakoutBall(panel);
+	BreakoutBall newBall = new BreakoutBall(panel, paddle);
 	synchronized(lock) {
 	    list.add(newBall);
 	}
