@@ -94,7 +94,6 @@ public class BrickCollection {
      */
     public synchronized Point hitBrick(int ballX, int ballY, int ballR) {
 
-	Point lastHit = null;
 	int rowTop = TOP_ROW_OFFSET;
 	int brickWidth = component.getWidth() / BRICKS_PER_ROW;
         for (int row = 0; row < NUM_ROWS; row++) {
@@ -106,13 +105,13 @@ public class BrickCollection {
 						      brickWidth,
 						      BRICK_HEIGHT)) {
                     bricks[row][col] = false;
-                    lastHit = new Point(nextBrickX, rowTop);
+                    return new Point(nextBrickX, rowTop);
                 }
 		nextBrickX += brickWidth;
             }
 	    rowTop += BRICK_HEIGHT;
         }
         
-        return lastHit;
+        return null;
     }
 }
