@@ -17,6 +17,10 @@ import javax.swing.JPanel;
 
 public class Breakout extends ThreadGraphicsController implements MouseListener {
 
+    // delay time between frames of animation (ms)
+    public static final int DELAY_TIME = 33;
+
+
     private BreakoutPaddle paddle;
     
     /**
@@ -54,7 +58,8 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
     }
     /**
        Add the panel to the frame, and set up additional components, which
-       here are the BreakoutBall and the BreakoutBricks.
+       here are the BreakoutBall and the BreakoutBricks, also setting up
+       a repaint thread.
 
        @param frame the JFrame to which the panel is added
        be added
@@ -64,6 +69,18 @@ public class Breakout extends ThreadGraphicsController implements MouseListener 
 
 	paddle = new BreakoutPaddle(panel);
     	frame.add(panel);
+
+	// repaint regularly forever thread
+	new Thread() {
+	    @Override
+	    public void run() {
+		while (true) {
+		    AnimatedGraphicsObject.sleepWithCatch(DELAY_TIME);
+		    panel.repaint();
+		}
+		
+	    }
+	}.start();
     }
 
     /**

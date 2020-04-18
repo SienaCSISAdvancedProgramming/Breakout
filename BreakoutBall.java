@@ -15,6 +15,9 @@ import javax.swing.JComponent;
 */
 class BreakoutBall extends AnimatedGraphicsObject {
 
+    // delay time between frames of animation (ms)
+    public static final int DELAY_TIME = 33;
+
     // a static Random object shared among all BreakoutBall objects
     private static Random r = new Random();
 
@@ -25,17 +28,11 @@ class BreakoutBall extends AnimatedGraphicsObject {
     // ball size
     public static final int SIZE = 25;
 
-    // delay time between frames of animation (ms)
-    public static final int DELAY_TIME = 33;
-
     // pixels to move each iteration
     private double xSpeed, ySpeed;
 
     // latest location of the ball
     private double upperLeftX, upperLeftY;
-
-    // max allowed x coordinate of the upper left corner
-    private int xMax;
 
     // reference to the paddle
     private BreakoutPaddle paddle;
@@ -46,7 +43,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
 
        @param paddle the BreakoutPaddle we need to see if we hit
        @param container the Swing component in which this ball is being
-       drawn to allow it to call that component's repaint method
+       drawn to allow check sizes
     */
     public BreakoutBall(JComponent container, BreakoutPaddle paddle) {
 
@@ -59,7 +56,6 @@ class BreakoutBall extends AnimatedGraphicsObject {
 	upperLeftY = container.getHeight() / 2;
 	xSpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
 	ySpeed = r.nextDouble() * (MAX_SPEED-MIN_SPEED) + MIN_SPEED;
-	xMax = container.getWidth() - SIZE;
 	this.paddle = paddle;
     }
 
@@ -99,6 +95,7 @@ class BreakoutBall extends AnimatedGraphicsObject {
 		xSpeed = -xSpeed;
 	    }
 
+	    int xMax = container.getWidth() - SIZE;
 	    if (upperLeftX > xMax) {
 		upperLeftX = xMax;
 		bounced = true;
@@ -121,7 +118,6 @@ class BreakoutBall extends AnimatedGraphicsObject {
 	    // if we've gone off the bottom, we're done
 	    if (upperLeftY > container.getHeight()) done = true;
 
-	    container.repaint();
 	}
     }
 }

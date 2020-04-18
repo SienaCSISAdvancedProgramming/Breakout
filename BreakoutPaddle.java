@@ -60,7 +60,6 @@ class BreakoutPaddle extends MouseAdapter {
 	    paddleX = component.getWidth() - PADDLE_WIDTH;
 	}
 
-	component.repaint();
     }
 
     /**
