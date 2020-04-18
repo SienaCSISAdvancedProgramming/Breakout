@@ -92,7 +92,7 @@ public class BrickCollection {
        @return the upper left coordinates of a brick that was hit, or null
        if no brick was hit
      */
-    public Point hitBrick(int ballX, int ballY, int ballR) {
+    public synchronized Point hitBrick(int ballX, int ballY, int ballR) {
 
 	Point lastHit = null;
 	int rowTop = TOP_ROW_OFFSET;
